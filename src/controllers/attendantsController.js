@@ -1,7 +1,7 @@
 const attendantService = require('../services/attendants/attendants');
 const authService = require('../services/attendants/auth');
 const jwt = require('jsonwebtoken');
-const redisClient = require('../path/to/redisClient');
+const redisClient = require('../redis/redisClient');
 
 // Registrar um novo atendente
 const registerAttendant = async (req, res) => {
