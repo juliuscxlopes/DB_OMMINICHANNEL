@@ -5,13 +5,12 @@ const attendantsController = require('../controllers/attendantsController');
 const processAttendantData = require('../middleware/attendantsMiddleware');
 const authenticateToken = require('../middleware/authMiddleware'); // Importa o middleware de autenticação
 
-// CRUD para atendentes
-router.post('/register', authenticateToken, processAttendantData, attendantsController.registerAttendant); // Protege a rota de registro
-//router.get('/:email', authenticateToken, attendantsController.getAttendant);
-//router.put('/:email', authenticateToken, attendantsController.updateAttendant);
-//outer.delete('/:email', authenticateToken, attendantsController.deleteAttendant);
+// Rota de registro
+router.post('/register', processAttendantData, attendantsController.registerAttendant);
 
-// Autenticação de login (sem middleware de autenticação)
+// Rota de login
 router.post('/login', processAttendantData, attendantsController.loginAttendant);
+
+// Outras rotas que precisam ser autenticadas, se houver
 
 module.exports = router;
