@@ -9,7 +9,7 @@ const authenticateToken = require('../middleware/authMiddleware'); // Importa o 
 router.post('/register', authenticateToken, processAttendantData, attendantsController.registerAttendant); // Protege a rota de registro
 //router.get('/:email', authenticateToken, attendantsController.getAttendant);
 //router.put('/:email', authenticateToken, attendantsController.updateAttendant);
-r//outer.delete('/:email', authenticateToken, attendantsController.deleteAttendant);
+//outer.delete('/:email', authenticateToken, attendantsController.deleteAttendant);
 
 // Autenticação de login (sem middleware de autenticação)
 router.post('/login', processAttendantData, attendantsController.loginAttendant);
