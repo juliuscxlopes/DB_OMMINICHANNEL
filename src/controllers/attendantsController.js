@@ -1,6 +1,7 @@
 const attendantService = require('../services/attendants/attendants');
 const authService = require('../services/attendants/auth');
 const jwt = require('jsonwebtoken');
+const redisClient = require('../path/to/redisClient');
 
 // Registrar um novo atendente
 const registerAttendant = async (req, res) => {
@@ -37,12 +38,22 @@ const loginAttendant = async (req, res) => {
       const isAuthenticated = await authService.authenticate(email, password);
 
       if (isAuthenticated) {
-        // Aqui geramos o token JWT
+        // Geramos o token JWT
         const token = jwt.sign(
           { id: attendant.id, email: attendant.email },
           process.env.JWT_SECRET,
           { expiresIn: '1h' }
         );
+
+        // Persistindo o atendente no Redis
+        await redisClient.hSet(`attendant:${attendant.id}`, {
+          email: attendant.email,
+          status: 'active',
+          lastActivity: Date.now(),
+        });
+
+        // Configurando um tempo de expiração (opcional)
+        await redisClient.expire(`attendant:${attendant.id}`, 3600); // 1 hora
 
         // Retornamos o token junto com a resposta de sucesso
         res.status(200).json({ message: 'Login successful', token });
@@ -56,8 +67,7 @@ const loginAttendant = async (req, res) => {
     console.error('Error during login:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
-};
-
+}
 
 
 
